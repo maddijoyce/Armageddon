@@ -1,0 +1,31 @@
+{
+  "name": "armageddon",
+  "version": "0.0.1",
+  "description": "Meteor.js App Manager",
+  "main": "bootstrapper.js",
+  "dependencies": {
+    "babel-preset-es2015": "^6.6.0",
+    "babel-register": "^6.8.0",
+    "menubar": "^4.1.1",
+    "react": "^15.0.2"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "^1.1.0"
+  },
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "maddijoyce/armageddon.git",
+  "keywords": [
+    "meteor",
+    "app",
+    "manager"
+  ],
+  "author": "Maddison Joyce",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maddijoyce/armageddon/issues"
+  },
+  "homepage": "https://github.com/maddijoyce/armageddon#readme"
+}
