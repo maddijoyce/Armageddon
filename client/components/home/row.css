@@ -1,0 +1,38 @@
+.Rows {
+  width: 100%;
+}
+
+.Row {
+  box-sizing: border-box;
+  cursor: pointer;
+  padding: 1.6rem;
+  width: 100%;
+}
+.Row:hover { background: silver; }
+
+.Row-info {
+  width: 70%;
+  word-break: break-all;
+}
+
+.Row-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin: 0 0 1rem;
+}
+
+.Row-subtitle {
+  color: gray;
+  font-size: 1.2rem;
+  font-weight: normal;
+  margin: 0.2rem 0 0;
+}
+
+.Watermark {
+  color: gray;
+  font-size: 2rem;
+  font-weight: normal;
+  letter-spacing: 0.1rem;
+  margin: 4rem;
+  text-align: center;
+}

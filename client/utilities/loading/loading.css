@@ -1,0 +1,36 @@
+.Loading {
+  display: block;
+  margin: 4rem auto;
+  width: 90%;
+}
+
+.Loading-text {
+  display: block;
+  font-size: 1.2rem;
+  text-align: center;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.Loading-bar {
+  background: rgba(97, 187, 255, 0.4);
+  height: 0.4rem;
+  margin: 0.6rem 0;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.Loading-progress {
+  animation: loading 2s infinite;
+  background: rgba(97, 187, 255, 1);
+  height: 100%;
+  left: -40%;
+  position: absolute;
+  width: 40%;
+}
+
+@keyframes loading {
+  0% { left: -40%; }
+  100% { left: 140%; }
+}

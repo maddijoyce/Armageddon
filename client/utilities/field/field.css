@@ -1,0 +1,69 @@
+.Field {
+  border-bottom: 1px solid silver;
+  font-size: 1.5rem;
+  margin: 1rem auto;
+  position: relative;
+  text-align: left;
+  width: 90%;
+}
+
+.Field-input {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  display: block;
+  font-size: inherit;
+  margin: 0;
+  min-height: 1.8rem;
+  padding: 1.7rem 0 0.6rem;
+  text-align: inherit;
+  width: 100%;
+}
+
+.Field-input:focus { outline: none; }
+
+.Field-label {
+  bottom: 0;
+  color: gray;
+  font-size: inherit;
+  left: 0;
+  padding: 1.7rem 0 0.6rem;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: all 0.4s ease;
+}
+
+.Field-label-text {
+  margin-left: 0.4rem;
+}
+
+.Field-input:focus + .Field-label,
+.Field--full > .Field-label {
+  font-size: 1rem;
+  padding-top: 0;
+}
+
+.Field-input:hover + .Field-label,
+.Field-input:focus + .Field-label,
+.Field.Field--focus .Field-input + .Field-label {
+  color: navy;
+}
+
+.Field-bar {
+  background: blue;
+  bottom: 0;
+  height: 0.2rem;
+  left: 50%;
+  position: absolute;
+  transition: all 0.4s ease;
+  width: 0;
+}
+
+.Field-input:focus ~ .Field-bar,
+.Field.Field--focus .Field-input ~ .Field-bar {
+  left: 0;
+  width: 100%;
+}

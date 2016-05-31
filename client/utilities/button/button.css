@@ -1,0 +1,29 @@
+.Button {
+  background: none;
+  border: none;
+  color: blue;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1.1rem;
+  margin: 0;
+  padding: 1.2rem 0;
+  text-align: center;
+  transition: all 0.4s ease;
+}
+
+.Button:hover {
+  background: silver;
+  color: navy;
+}
+.Button:focus { outline: none; }
+
+.Button--half { width: 50%; }
+.Button--full { width: 100%; }
+
+.Button--gray { color: gray; }
+.Button--gray:hover { color: black; }
+
+.Button-text {
+  margin-left: 0.4rem;
+  text-transform: uppercase;
+}
