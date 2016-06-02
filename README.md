@@ -3,7 +3,7 @@
 Armageddon is a desktop app designed to make running local meteor apps easier.
 Apps can be loaded into the menu bar interface and then accessed using a local domain name.
 
-![Screenshot](server/root/screenshot.png)
+![Screenshot](server/root/screenshot-0.0.2.png)
 
 ### Todos
 

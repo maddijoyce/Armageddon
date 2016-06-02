@@ -1,6 +1,6 @@
 {
   "name": "armageddon",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Meteor.js App Manager",
   "main": "bootstrapper.js",
   "dependencies": {
