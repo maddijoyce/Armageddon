@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 import path from 'path';
 
-import { Button, Field, File, Loading } from '../../utilities';
+import { Button, Field, FileField, CheckBox, Loading } from '../../utilities';
+import { Buttons } from '../../utilities/button/button.css';
 
 const propTypes = {
   client: PropTypes.object.isRequired,
@@ -16,6 +17,7 @@ class Edit extends React.Component {
     this.setPage = this.setPage.bind(this);
     this.setValue = this.setValue.bind(this);
     this.saveApp = this.saveApp.bind(this);
+    this.deleteApp = this.deleteApp.bind(this);
   }
 
   componentWillReceiveProps({ app }) {
@@ -46,13 +48,49 @@ class Edit extends React.Component {
     client.request('setPage', page);
   }
 
+  deleteApp(page) {
+    const app = this.state;
+    const { client, settings } = this.props;
+    client.request('deleteApp', { settings, app });
+    client.request('setPage', page);
+  }
+
   render() {
     if (!this.state) return <Loading />;
-    const { domain, directory } = this.state;
+    const { active, domain, directory } = this.state;
 
     return (
       <div>
-        <File
+        <div className={Buttons}>
+          <Button
+            name="home"
+            label="Cancel"
+            icon="arrow-left"
+            colour="silver"
+            action={this.setPage}
+          />
+          {this.state.new ? '' : <Button
+            name="home"
+            label="Delete"
+            icon="minus"
+            colour="red"
+            action={this.deleteApp}
+          />}
+          <Button
+            name="home"
+            label="Save"
+            icon="check"
+            colour="green"
+            action={this.saveApp}
+          />
+        </div>
+        <CheckBox
+          name="active"
+          label="Active"
+          value={active}
+          change={this.setValue}
+        />
+        <FileField
           name="directory"
           label="Directory"
           icon="folder"
@@ -65,21 +103,6 @@ class Edit extends React.Component {
           icon="cloud"
           value={domain}
           change={this.setValue}
-        />
-        <Button
-          name="home"
-          label="Cancel"
-          icon="arrow-left"
-          colour="gray"
-          size="half"
-          action={this.setPage}
-        />
-        <Button
-          name="home"
-          label="Save"
-          icon="upload"
-          size="half"
-          action={this.saveApp}
         />
       </div>
     );

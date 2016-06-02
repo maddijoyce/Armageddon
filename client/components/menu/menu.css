@@ -2,3 +2,8 @@
   color: black;
   font: caption;
 }
+
+.Body {
+  min-height: 95px;
+  position: relative;
+}

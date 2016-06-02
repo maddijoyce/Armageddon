@@ -1,29 +1,58 @@
+.Buttons {
+  background: url("/images/background.jpg"), navy;
+  background-position: bottom;
+  background-size: cover;
+  bottom: 0;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+  z-index: 999;
+}
+
 .Button {
   background: none;
   border: none;
-  color: blue;
+  color: white;
   cursor: pointer;
   display: inline-block;
-  font-size: 1.1rem;
+  font-weight: 200;
   margin: 0;
-  padding: 1.2rem 0;
+  padding: 1.2rem 1rem 2.2rem;
+  position: relative;
   text-align: center;
   transition: all 0.4s ease;
 }
 
-.Button:hover {
-  background: silver;
-  color: navy;
-}
-.Button:focus { outline: none; }
+.Button.Button--green:hover,
+.Button.Button--green:hover .Button-text { color: green; }
 
-.Button--half { width: 50%; }
-.Button--full { width: 100%; }
+.Button.Button--silver:hover,
+.Button.Button--silver:hover .Button-text { color: silver; }
 
-.Button--gray { color: gray; }
-.Button--gray:hover { color: black; }
+.Button.Button--red:hover,
+.Button.Button--red:hover .Button-text { color: red; }
+
+.Button.Button--inverse { color: gray; }
+
+.Button.Button--inverse:hover,
+.Button.Button--inverse:hover .Button-text { color: blue; }
 
 .Button-text {
-  margin-left: 0.4rem;
+  bottom: 0.3rem;
+  display: block;
+  font-size: 1rem;
+  left: 50%;
+  margin: 0.4rem auto;
+  opacity: 0;
+  position: absolute;
   text-transform: uppercase;
+  transform: translateX(-50%);
+  transition: all 0.4s ease;
+  white-space: nowrap;
 }
+
+.Button:hover .Button-text {
+  opacity: 1;
+}
+
+.Button:focus { outline: none; }

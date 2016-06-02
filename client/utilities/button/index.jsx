@@ -2,13 +2,12 @@ import React, { PropTypes } from 'react';
 import { compact } from 'underscore';
 
 import Icon from '../icon';
-import s from './button.css';
+import css from './button.css';
 
 const propTypes = {
   name: PropTypes.string.isRequired,
   action: PropTypes.func,
   colour: PropTypes.string,
-  size: PropTypes.string,
   icon: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
 };
@@ -29,17 +28,16 @@ class Button extends React.Component {
   }
 
   render() {
-    const { size, colour, icon, label } = this.props;
+    const { colour, icon, label } = this.props;
     const classes = compact([
-      s.Button,
-      (colour ? s[`Button--${colour}`] : null),
-      (size ? s[`Button--${size}`] : null),
+      css.Button,
+      (colour ? css[`Button--${colour}`] : null),
     ]).join(' ');
 
     return (
       <button onClick={this.onClick} className={classes}>
-        <Icon name={icon} size="lg" />
-        <span className={s['Button-text']}>{label}</span>
+        <Icon name={icon} size="2x" />
+        <span className={css['Button-text']}>{label}</span>
       </button>
     );
   }

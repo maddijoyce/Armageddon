@@ -1,16 +1,20 @@
 import Button from './button';
+import Bar from './button/bar';
 import Icon from './icon';
 import Title from './title';
 import Field from './field';
 import Loading from './loading';
 
-import File from './field/file';
+import FileField from './field/file';
+import CheckBox from './field/check';
 
 export {
+  Bar,
   Button,
   Icon,
   Title,
-  Field,
   Loading,
-  File,
+  Field,
+  FileField,
+  CheckBox,
 };

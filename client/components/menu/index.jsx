@@ -6,7 +6,7 @@ import Home from '../home';
 import Edit from '../edit';
 import Settings from '../settings';
 
-import s from './menu.css';
+import css from './menu.css';
 
 const pages = {
   home: {
@@ -16,7 +16,7 @@ const pages = {
   add: {
     title: 'Add App',
     body: Edit,
-    app: { new: true },
+    app: { new: true, active: true },
   },
   edit: {
     body: Edit,
@@ -62,14 +62,16 @@ class Menu extends React.Component {
     } = this.state;
 
     return (
-      <div className={s.Menu}>
+      <div className={css.Menu}>
         <Title label={page.title || app.domain} />
-        <page.body
-          client={this.client}
-          settings={settings}
-          apps={apps}
-          app={app || page.app}
-        />
+        <div className={css.Body}>
+          <page.body
+            client={this.client}
+            settings={settings}
+            apps={apps}
+            app={app || page.app}
+          />
+        </div>
       </div>
     );
   }

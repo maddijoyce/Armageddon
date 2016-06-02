@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import { Button, Field, Loading } from '../../utilities';
+import { Bar, Button, Field, Loading } from '../../utilities';
 
 const propTypes = {
   client: PropTypes.object.isRequired,
@@ -33,38 +33,44 @@ class Settings extends React.Component {
 
   updateSettings(page) {
     const { client } = this.props;
+    console.log(this.state);
     client.request('updateSettings', this.state);
     client.request('setPage', page);
   }
 
-  render() {
-    if (!this.state) return <Loading />;
+  renderForm() {
     const { tld } = this.state;
+    return (<div>
+      <Field
+        name="tld"
+        label="Top Level Domain"
+        icon="globe"
+        value={tld}
+        change={this.setValue}
+      />
+    </div>);
+  }
 
+  render() {
     return (
       <div>
-        <Field
-          name="tld"
-          label="Top Level Domain"
-          icon="globe"
-          value={tld}
-          change={this.setValue}
-        />
-        <Button
-          name="home"
-          label="Cancel"
-          icon="arrow-left"
-          colour="white"
-          size="half"
-          action={this.setPage}
-        />
-        <Button
-          name="home"
-          label="Update"
-          icon="upload"
-          size="half"
-          action={this.updateSettings}
-        />
+        <Bar>
+          <Button
+            name="home"
+            label="Cancel"
+            icon="arrow-left"
+            colour="silver"
+            action={this.setPage}
+          />
+          <Button
+            name="home"
+            label="Update"
+            icon="check"
+            colour="green"
+            action={this.updateSettings}
+          />
+        </Bar>
+        {this.state ? this.renderForm() : <Loading />}
       </div>
     );
   }

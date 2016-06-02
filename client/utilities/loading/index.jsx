@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import s from './loading.css';
+import css from './loading.css';
 
 const propTypes = {
   label: PropTypes.string.isRequired,
@@ -10,10 +10,12 @@ const defaultProps = {
 };
 
 const Loading = ({ label }) => (
-  <div className={s.Loading}>
-    <div className={s['Loading-text']}>{label}</div>
-    <div className={s['Loading-bar']}>
-      <div className={s['Loading-progress']} />
+  <div className={css.Fade}>
+    <div className={css.Loading}>
+      <div className={css['Loading-text']}>{label}</div>
+      <div className={css['Loading-bar']}>
+        <div className={css['Loading-progress']} />
+      </div>
     </div>
   </div>
 );

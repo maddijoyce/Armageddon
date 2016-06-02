@@ -6,14 +6,14 @@ import vhost from 'vhost';
 import portfinder from 'portfinder';
 import sudo from './sudo.js';
 
-export function startApp({ domain, directory }, { tld }) {
+function startApp({ host, directory }) {
   return new Promise((resolve, reject) => {
     portfinder.getPort((error, port) => {
       if (error) reject(error);
 
       const meteor = spawn('meteor', ['run', '--port', port], {
         cwd: directory,
-        env: extend({ ROOT_URL: `http://${domain}.${tld}` }, process.env),
+        env: extend({ ROOT_URL: `http://${host}` }, process.env),
       });
       meteor.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
@@ -30,7 +30,7 @@ export function startApp({ domain, directory }, { tld }) {
   });
 }
 
-export function startProxy({ port }) {
+function startProxy({ port }) {
   const proxyApp = connect().use(proxy({
     target: `http://localhost:${port}`,
     ws: true,
@@ -41,79 +41,93 @@ export function startProxy({ port }) {
   return { proxyApp };
 }
 
+function killApp({ active, meteor }) {
+  return new Promise((resolve) => {
+    if (active && meteor) {
+      meteor.on('close', (code, signal) => {
+        resolve(signal);
+      });
+      meteor.kill('SIGTERM');
+    } else {
+      resolve();
+    }
+  });
+}
+
+function removeHost({ host }) {
+  return new Promise((resolve, reject) => {
+    sudo({
+      module: 'hostile',
+      method: 'remove',
+      params: ['127.0.0.1', host],
+    }, (error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+function addHost({ host }) {
+  return new Promise((resolve, reject) => {
+    sudo({
+      module: 'hostile',
+      method: 'set',
+      params: ['127.0.0.1', host],
+    }, (error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
 export function removeMiddleware(mainProxy, handle) {
   const index = findIndex(mainProxy.stack, (s) => (s.handle === handle));
   if (index >= 0) mainProxy.stack.splice(index, 1);
 }
 
-export function killApp({ meteor }) {
-  return new Promise((resolve) => {
-    meteor.on('close', (code, signal) => {
-      resolve(signal);
-    });
-    meteor.kill('SIGTERM');
-  });
-}
-
-export function removeHost({ domain }, { tld }) {
-  return new Promise((resolve, reject) => {
-    sudo({
-      module: 'hostile',
-      method: 'remove',
-      params: ['127.0.0.1', `${domain}.${tld}`],
-    }, (error) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve();
-      }
-    });
-  });
-}
-
-export function addHost({ domain }, { tld }) {
-  return new Promise((resolve, reject) => {
-    sudo({
-      module: 'hostile',
-      method: 'set',
-      params: ['127.0.0.1', `${domain}.${tld}`],
-    }, (error) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve();
-      }
-    });
-  });
-}
-
-export function undeployApp(app, settings, mainProxy) {
+export function undeployApp({ app, mainProxy }) {
   let promise = Promise.resolve();
+
   if (app) {
     removeMiddleware(mainProxy, app.vhost);
-    promise = killApp(app, settings).then(() => (removeHost(app, settings)));
+    promise = removeHost(app)
+    .then(() => (killApp(app)));
   }
 
   return promise;
 }
 
-export function deployApp(app, settings) {
+export function deployApp({ app, settings, mainProxy }) {
   const newApp = app;
+  let promise;
 
-  return startApp(app, settings).then(({ port, meteor }) => {
-    newApp.port = port;
-    newApp.meteor = meteor;
+  newApp.host = `${newApp.domain}.${settings.tld}`;
 
-    return startProxy(newApp);
-  })
-  .then(({ proxyApp }) => {
-    newApp.proxyApp = proxyApp;
-    newApp.vhost = vhost(`${newApp.domain}.${settings.tld}`, newApp.proxyApp);
+  if (newApp && newApp.active) {
+    promise = startApp(app).then(({ port, meteor }) => {
+      newApp.port = port;
+      newApp.meteor = meteor;
 
-    return addHost(newApp, settings);
-  })
-  .then(() => (newApp))
-  .catch((error) => {
-    console.error(`Error deploying ${app.domain}`, error);
-  });
+      return startProxy(newApp);
+    })
+    .then(({ proxyApp }) => {
+      newApp.proxyApp = proxyApp;
+      newApp.vhost = vhost(newApp.host, newApp.proxyApp);
+      mainProxy.use(newApp.vhost);
+
+      return addHost(newApp);
+    })
+    .then(() => (newApp));
+  } else {
+    promise = addHost(newApp)
+    .then(() => (newApp));
+  }
+
+  return promise;
 }

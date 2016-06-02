@@ -19,6 +19,7 @@
     "portfinder": "^1.0.3",
     "postcss": "^5.0.21",
     "postcss-calc": "^5.2.1",
+    "postcss-color-function": "^2.0.1",
     "postcss-color-palette": "0.0.3",
     "postcss-fontpath": "^0.3.0",
     "postcss-modules-extract-imports": "^1.0.1",

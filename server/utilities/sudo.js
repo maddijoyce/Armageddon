@@ -21,7 +21,7 @@ export default function ({ module, method, params, cwd, type }, callback) {
 
     sudo.exec(cmd.join(' '), {
       name: 'Armageddon',
-      icns: `${process.cwd()}/client/icon/Icon.icns`,
+      icns: `${process.cwd()}/client/images/Icon.icns`,
     }, (error, result) => {
       let parsed;
       try {

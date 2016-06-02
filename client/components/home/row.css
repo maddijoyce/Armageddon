@@ -4,15 +4,25 @@
 
 .Row {
   box-sizing: border-box;
-  cursor: pointer;
   padding: 1.6rem;
+  position: relative;
   width: 100%;
 }
-.Row:hover { background: silver; }
+.Row:nth-child(odd) { background: silver; }
 
 .Row-info {
   width: 70%;
   word-break: break-all;
+}
+
+.Row-link {
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.Row-link:hover {
+  color: blue;
 }
 
 .Row-title {
@@ -28,11 +38,23 @@
   margin: 0.2rem 0 0;
 }
 
+.Row-subtitle.Row-subtitle--red { color: red; }
+.Row-subtitle.Row-subtitle--blue { color: blue; }
+
+.Row-buttons {
+  display: block;
+  float: right;
+  position: absolute;
+  right: 0.2rem;
+  top: 1.4rem;
+}
+
 .Watermark {
   color: gray;
-  font-size: 2rem;
+  font-size: 1.2rem;
   font-weight: normal;
   letter-spacing: 0.1rem;
   margin: 4rem;
   text-align: center;
+  text-transform: uppercase;
 }

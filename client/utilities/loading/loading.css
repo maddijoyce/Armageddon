@@ -1,6 +1,19 @@
+.Fade {
+  background: color(white a(80%));
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 998;
+}
+
 .Loading {
   display: block;
-  margin: 4rem auto;
+  left: 5%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   width: 90%;
 }
 

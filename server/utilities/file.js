@@ -2,7 +2,12 @@ import fs from 'fs';
 import { map, pick } from 'underscore';
 
 export function sanitizeData(content) {
-  return map(content, (c) => (pick(c, 'id', 'directory', 'domain')));
+  return map(content, (c) => (pick(c, [
+    'id',
+    'active',
+    'directory',
+    'domain',
+  ])));
 }
 
 export function readJSONFile(file) {

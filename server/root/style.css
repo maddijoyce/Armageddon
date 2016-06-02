@@ -1,0 +1,43 @@
+body {
+  background: #f3f3f4;
+  font: caption;
+}
+
+h1 {
+  color: #235874;
+  font-size: 50px;
+  letter-spacing: 1px;
+  margin: 100px 0 25px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.icon {
+  height: 100px;
+  vertical-align: middle;
+  width: auto;
+}
+
+.text {
+  margin: 0 auto;
+  max-width: 100%;
+  width: 600px;
+}
+
+p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #787883;
+  box-sizing: content-box;
+  height: 0;
+  margin: 30px 0;
+}
+
+.screenshot {
+  display: block;
+  margin: 30px auto;
+}

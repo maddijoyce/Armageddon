@@ -1,17 +1,19 @@
 .Title {
-  background: blue;
+  background: url("/images/background.jpg"), navy;
+  background-position: top;
+  background-size: cover;
   color: white;
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   font-weight: bold;
   letter-spacing: 1px;
   margin: 0;
-  padding: 1.8rem 0;
+  padding: 1.2rem 0;
   text-align: center;
   text-transform: uppercase;
 }
 
 .Title-icon {
-  height: 3.6rem;
+  height: 3rem;
   padding: 0 0.6rem;
   vertical-align: middle;
 }

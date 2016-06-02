@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import { keys, map } from 'underscore';
 
-import { Button, Loading } from '../../utilities';
+import { Bar, Button, Loading } from '../../utilities';
 import Row from './row.jsx';
-import s from './row.css';
+import css from './row.css';
 
 const propTypes = {
   client: PropTypes.object.isRequired,
@@ -29,7 +29,7 @@ class Home extends React.Component {
     if (!apps || !settings) {
       return <Loading />;
     } else if (!keys(apps).length) {
-      return (<h3 className={s.Watermark}>You haven't added any apps.</h3>);
+      return (<h3 className={css.Watermark}>You haven't added any apps.</h3>);
     }
 
     const { tld } = settings;
@@ -39,23 +39,23 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <div className={s.Rows}>
+        <Bar>
+          <Button
+            name="add"
+            label="Add App"
+            icon="plus"
+            action={this.setPage}
+          />
+          <Button
+            name="settings"
+            label="Settings"
+            icon="wrench"
+            action={this.setPage}
+          />
+        </Bar>
+        <div className={css.Rows}>
           {this.renderApps()}
         </div>
-        <Button
-          name="add"
-          label="Add"
-          icon="plus"
-          size="half"
-          action={this.setPage}
-        />
-        <Button
-          name="settings"
-          label="Settings"
-          icon="wrench"
-          size="half"
-          action={this.setPage}
-        />
       </div>
     );
   }

@@ -2,9 +2,9 @@ import React from 'react';
 import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
 
 import Field from './index.jsx';
-import s from './field.css';
+import css from './field.css';
 
-class File extends Field {
+class FileField extends Field {
   onClick(event) {
     const { name, change } = this.props;
     const { dialog, BrowserWindow } = remote;
@@ -22,7 +22,7 @@ class File extends Field {
   renderInput() {
     const { name, value } = this.props;
     return (<div
-      className={s['Field-input']}
+      className={css['Field-input']}
       id={name}
       onClick={this.onClick}
     >
@@ -31,4 +31,4 @@ class File extends Field {
   }
 }
 
-export default File;
+export default FileField;

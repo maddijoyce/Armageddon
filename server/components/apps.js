@@ -27,7 +27,7 @@ export default function ({ server, appDataPath }) {
     mainProxy.listen(port);
     sudo.exec(`node ${process.cwd()}/server/root/proxy.js ${port}`, {
       name: 'Armageddon',
-      icns: `${process.cwd()}/client/icon/Icon.icns`,
+      icns: `${process.cwd()}/client/images/Icon.icns`,
     });
   });
 
@@ -41,7 +41,8 @@ export default function ({ server, appDataPath }) {
   server.on('initializeApps', ({ body }) => {
     const { settings } = body;
 
-    Promise.all(map(apps, (a) => (deployApp(settings, a))))
+    Promise.all(map(apps, (app) => (undeployApp({ app, settings, mainProxy }))))
+    .then(() => (Promise.all(map(apps, (app) => (deployApp({ app, settings, mainProxy }))))))
     .then((newApps) => {
       apps = object(map(newApps, (a) => {
         mainProxy.use(a.vhost);
@@ -50,23 +51,41 @@ export default function ({ server, appDataPath }) {
 
       removeMiddleware(mainProxy, fallbackStatic);
       mainProxy.use(fallbackStatic);
-
       server.send('appsChanged', apps);
     });
   });
   server.on('updateApp', ({ body }) => {
     const { app, settings } = body;
+    delete(app.new);
     app.id = app.id || uuid.v1();
 
-    undeployApp(apps[app.id], settings, mainProxy)
-    .then(() => (deployApp(app, settings)))
+    if (apps[app.id]) {
+      apps[app.id].loading = 'Updating...';
+      server.send('appsChanged', apps);
+    }
+
+    undeployApp({ app: apps[app.id], settings, mainProxy })
+    .then(() => (deployApp({ app, settings, mainProxy })))
     .then((newApp) => {
       apps[newApp.id] = newApp;
-      mainProxy.use(newApp.vhost);
       writeJSONFile(appsFile, apps);
 
       removeMiddleware(mainProxy, fallbackStatic);
       mainProxy.use(fallbackStatic);
+
+      server.send('appsChanged', apps);
+    });
+  });
+  server.on('deleteApp', ({ body }) => {
+    const { app, settings } = body;
+
+    apps[app.id].loading = 'Deleting...';
+    server.send('appsChanged', apps);
+
+    undeployApp(apps[app.id], settings, mainProxy)
+    .then(() => {
+      delete(apps[app.id]);
+      writeJSONFile(appsFile, apps);
 
       server.send('appsChanged', apps);
     });

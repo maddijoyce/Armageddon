@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { compact } from 'underscore';
-import s from './field.css';
+import css from './field.css';
 
 import Icon from '../icon';
 
@@ -40,7 +40,7 @@ class Field extends React.Component {
   renderInput() {
     const { name, type, value } = this.props;
     return (<input
-      className={s['Field-input']}
+      className={css['Field-input']}
       name={name}
       id={name}
       type={type}
@@ -55,19 +55,19 @@ class Field extends React.Component {
     const { focus } = this.state;
 
     const classes = compact([
-      s.Field,
-      (value ? s['Field--full'] : null),
-      (focus ? s['Field--focus'] : null),
+      css.Field,
+      (value ? css['Field--full'] : null),
+      (focus ? css['Field--focus'] : null),
     ]).join(' ');
 
     return (
       <div className={classes}>
         {this.renderInput()}
-        <label className={s['Field-label']}>
+        <label className={css['Field-label']}>
           <Icon name={icon} />
-          <span className={s['Field-label-text']}>{label}</span>
+          <span className={css['Field-label-text']}>{label}</span>
         </label>
-        <div className={s['Field-bar']} />
+        <div className={css['Field-bar']} />
       </div>
     );
   }

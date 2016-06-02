@@ -21,7 +21,7 @@ export default function ({ server, appDataPath }) {
     server.send('settingsChanged', settings);
   });
   server.on('updateSettings', ({ body }) => {
-    settings = body.settings;
+    settings = body;
     writeJSONFile(settingsFile, settings);
     server.send('settingsChanged', settings);
   });

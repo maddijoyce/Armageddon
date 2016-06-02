@@ -1,16 +1,11 @@
-# Armageddon
-## A meteor.js app manager
+# Armageddon - a meteor.js app manager
 
-![Screenshot](server/root/screenshot.png)
-
-## Armageddon is designed for local meteor development.
-
-### Features
-
-* Hostname support
+Armageddon is a desktop app designed to make running local meteor apps easier.
+Apps can be loaded into the menu bar interface and then accessed using a local domain name.
 
 ### Todos
 
-* SSL Support
-* Meteor Config Support (Settings, etc.)
-* Log Support
+* xip.io
+* SSL
+* Meteor Config (Settings, etc.)
+* Log Files

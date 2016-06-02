@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { compact } from 'underscore';
-import s from './icon.css';
+import css from './icon.css';
 
 const propTypes = {
   name: PropTypes.string.isRequired,
@@ -19,12 +19,12 @@ const defaultProps = {
 
 const Icon = ({ name, style, fixed, size, colour, animation, loading }) => {
   const classes = compact([
-    s[`bt${style.charAt(0)}`],
-    s[`bt-${loading ? 'sync' : name}`],
-    (fixed ? s['bt-fw'] : null),
-    (size ? s[`bt-${size}`] : null),
-    (colour ? s[`${colour} fg`] : null),
-    ((animation || loading) ? s[`bt-${loading ? 'spin' : animation}`] : null),
+    css[`bt${style.charAt(0)}`],
+    css[`bt-${loading ? 'sync' : name}`],
+    (fixed ? css['bt-fw'] : null),
+    (size ? css[`bt-${size}`] : null),
+    (colour ? css[`${colour} fg`] : null),
+    ((animation || loading) ? css[`bt-${loading ? 'spin' : animation}`] : null),
   ]).join(' ');
 
   return <i className={classes} />;
