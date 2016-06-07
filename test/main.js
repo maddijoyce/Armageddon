@@ -17,7 +17,7 @@ function finished(test) {
 
 app.on('ready', () => {
   renderer = new BrowserWindow({ width: 600, height: 600 });
-  // renderer.hide();
+  renderer.hide();
   renderer.webContents.openDevTools();
   renderer.loadURL(`file://${__dirname}/renderer.html`);
   renderer.on('closed', () => {
