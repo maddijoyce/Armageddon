@@ -4,6 +4,7 @@ node_js:
   - '4.3.2'
 env:
   - CXX=g++-4.8
+  - DISPLAY=':99.0'
 addons:
   apt:
     sources:
@@ -13,7 +14,5 @@ addons:
       - xvfb
 
 before_script:
-  - "export DISPLAY=':99.0'"
-  - "export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/"
-  - "sh -e /etc/init.d/xvfb start"
+  - "sh -e /etc/init.d/xvfb start -extension RANDR"
   - sleep 3
