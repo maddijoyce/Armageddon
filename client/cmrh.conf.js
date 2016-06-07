@@ -1,7 +1,7 @@
 import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
 import path from 'path';
 
-import cssPalette from 'postcss-color-palette';
+import cssPalette from 'postcss-palette';
 import cssColor from 'postcss-color-function';
 import cssSimpleVars from 'postcss-simple-vars';
 import cssFontPath from 'postcss-fontpath';

@@ -4,7 +4,7 @@ import connect from 'connect';
 import portfinder from 'portfinder';
 import sudo from 'sudo-prompt';
 import serveStatic from 'serve-static';
-import { map, object } from 'underscore';
+import { map, object } from 'lodash';
 
 import {
   readJSONFile,

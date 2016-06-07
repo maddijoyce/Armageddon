@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { map, pick } from 'underscore';
+import { map, pick } from 'lodash';
 
 export function sanitizeData(content) {
   return map(content, (c) => (pick(c, [

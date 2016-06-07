@@ -18,17 +18,6 @@ class FileField extends Field {
       change(name, selected[0], event);
     }
   }
-
-  renderInput() {
-    const { name, value } = this.props;
-    return (<div
-      className={css['Field-input']}
-      id={name}
-      onClick={this.onClick}
-    >
-      {value}
-    </div>);
-  }
 }
 
 export default FileField;

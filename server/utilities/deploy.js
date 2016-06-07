@@ -1,5 +1,5 @@
 import { spawn } from 'child_process';
-import { extend, findIndex } from 'underscore';
+import { extend, findIndex } from 'lodash';
 import connect from 'connect';
 import proxy from 'http-proxy-middleware';
 import vhost from 'vhost';

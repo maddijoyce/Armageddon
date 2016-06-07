@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
-import { compact } from 'underscore';
+import { compact } from 'lodash';
 
-import Icon from '../icon';
+import Icon from '../icon/index.jsx';
 import css from './button.css';
 
 const propTypes = {
@@ -21,10 +21,8 @@ class Button extends React.Component {
 
   onClick(event) {
     const { name, action } = this.props;
-    if (action) {
-      event.preventDefault();
-      action(name, event);
-    }
+    if (action && event) event.preventDefault();
+    if (action) action(name, event);
   }
 
   render() {
@@ -35,9 +33,9 @@ class Button extends React.Component {
     ]).join(' ');
 
     return (
-      <button onClick={this.onClick} className={classes}>
+      <button onClick={this.onClick} className={classes} value={label}>
         <Icon name={icon} size="2x" />
-        <span className={css['Button-text']}>{label}</span>
+        <p className={css['Button-text']}>{label}</p>
       </button>
     );
   }

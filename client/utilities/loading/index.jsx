@@ -12,7 +12,7 @@ const defaultProps = {
 const Loading = ({ label }) => (
   <div className={css.Fade}>
     <div className={css.Loading}>
-      <div className={css['Loading-text']}>{label}</div>
+      <p className={css['Loading-text']}>{label}</p>
       <div className={css['Loading-bar']}>
         <div className={css['Loading-progress']} />
       </div>

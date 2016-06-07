@@ -10,9 +10,9 @@ const defaultProps = {
   icon: true,
 };
 
-const Title = ({ label }) => (
+const Title = ({ icon, label }) => (
   <h1 className={css.Title}>
-    <img className={css['Title-icon']} src="images/IconHighlight@3x.png" alt="Icon" />
+    {icon ? <img className={css['Title-icon']} src="images/IconHighlight@3x.png" alt="Icon" /> : ''}
     {label}
   </h1>
 );

@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
-import { compact } from 'underscore';
+import { compact } from 'lodash';
 import css from './field.css';
 
-import Icon from '../icon';
+import Icon from '../icon/index.jsx';
 
 const propTypes = {
   name: PropTypes.string.isRequired,

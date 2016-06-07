@@ -33,7 +33,6 @@ class Settings extends React.Component {
 
   updateSettings(page) {
     const { client } = this.props;
-    console.log(this.state);
     client.request('updateSettings', this.state);
     client.request('setPage', page);
   }

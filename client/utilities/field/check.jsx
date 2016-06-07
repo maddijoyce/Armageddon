@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { compact, extend, clone } from 'underscore';
+import { compact, extend, clone } from 'lodash';
 
 import Field from './index.jsx';
 import Icon from '../icon';
@@ -30,9 +30,12 @@ class CheckBox extends Field {
 
     return (
       <div className={classes}>
-        <div
-          className={css['Field-input']}
+        <input
+          type="checkbox"
+          className={css['Field-checkbox']}
+          name={name}
           id={name}
+          checked={value}
           onClick={this.onClick}
         />
         <label className={css['Field-label']}>

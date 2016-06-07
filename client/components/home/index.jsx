@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { keys, map } from 'underscore';
+import { keys, map } from 'lodash';
 
 import { Bar, Button, Loading } from '../../utilities';
 import Row from './row.jsx';

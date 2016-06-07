@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { compact } from 'underscore';
+import { compact } from 'lodash';
 import css from './icon.css';
 
 const propTypes = {
@@ -27,7 +27,7 @@ const Icon = ({ name, style, fixed, size, colour, animation, loading }) => {
     ((animation || loading) ? css[`bt-${loading ? 'spin' : animation}`] : null),
   ]).join(' ');
 
-  return <i className={classes} />;
+  return <i className={classes} alt={`${name} icon`} />;
 };
 
 Icon.propTypes = propTypes;
