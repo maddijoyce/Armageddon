@@ -5,11 +5,11 @@
       // Adding Babel Hooks in Renderer Process
       require('babel-register');
       require('css-modules-require-hook/preset');
-      const electron = require('electron'); // eslint-disable-line import/no-unresolved
-      const { ipcRenderer } = electron;
+      const { ipcRenderer } = require('electron'); // eslint-disable-line import/no-unresolved
       const IpcStream = require('electron-ipc-stream');
-      const test = require('tape');
+      const test = require('tape-catch');
       const path = require('path');
+      const { pick } = require('lodash');
 
       ipcRenderer.on('tests:start', (event, { files }) => {
         const testHarness = test.createHarness();
@@ -21,7 +21,14 @@
           const fileTest = require(filePath).default; // eslint-disable-line global-require
           fileTest(testHarness);
         });
-        testHarness.onFinish(() => { ipcRenderer.send('tests:end'); });
+        testHarness.onFinish(() => {
+          const results = pick(testHarness._results, [ // eslint-disable-line no-underscore-dangle
+            'count',
+            'pass',
+            'fail',
+          ]);
+          ipcRenderer.send('tests:end', results);
+        });
       });
     </script>
     <title>Armageddon Tests</title>

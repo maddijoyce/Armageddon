@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, render } from 'enzyme';
 import { spy } from 'sinon';
-import { map, contains } from 'lodash';
+import { map, includes } from 'lodash';
 
 import Button from './index.jsx';
 import Bar from './bar.jsx';
@@ -20,7 +20,7 @@ export default function (test) {
 
     assert.equal(element.find('button').length, 1, 'Renders a button');
     assert.equal(element.find('p').text(), mock.label, 'Renders a custom label');
-    assert.equal(contains(element.find('button').prop('className'), mock.colour), true,
+    assert.equal(includes(element.find('button').prop('className'), mock.colour), true,
       'Renders a custom colour');
 
     element.find('button').simulate('click');
