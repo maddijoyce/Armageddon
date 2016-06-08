@@ -27,7 +27,7 @@ export default function (test) {
 
     mock.client.request.reset();
     element.find('button[value="Cancel"]').simulate('click');
-    assert.equal(mock.client.request.calledWith('setPage', 'home'), false,
+    assert.equal(mock.client.request.calledWith('setPage', 'home'), true,
       'Cancels to home page');
   });
 }
