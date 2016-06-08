@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron'; // eslint-disable-line import/no-unresolved
 import IpcStream from 'electron-ipc-stream';
-import { filter, sumBy } from 'lodash';
+import { filter, sumBy, values } from 'lodash';
 import glob from 'glob';
 
 let renderer;
@@ -11,7 +11,7 @@ const progress = {
 function finished(test, results) {
   progress[test] = results;
   if (!filter(progress, (v) => (!v)).length) {
-    const fail = sumBy(progress, 'fail');
+    const fail = sumBy(values(progress), 'fail');
     app.exit(fail ? 1 : 0);
   }
 }
@@ -19,7 +19,7 @@ function finished(test, results) {
 // Renderer Tests
 app.on('ready', () => {
   renderer = new BrowserWindow({ width: 600, height: 600 });
-  // renderer.hide();
+  renderer.hide();
   renderer.webContents.openDevTools();
   renderer.loadURL(`file://${__dirname}/renderer.html`);
   renderer.on('closed', () => {
@@ -28,7 +28,7 @@ app.on('ready', () => {
 
   const testStream = new IpcStream('tests:out');
   testStream.pipe(process.stdout);
-  ipcMain.on('tests:end', (results) => { finished('renderer', results); });
+  ipcMain.on('tests:end', (event, results) => { finished('renderer', results); });
 
   glob('client/**/test.jsx', (error, files) => {
     if (error) throw error;
