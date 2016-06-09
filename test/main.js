@@ -13,7 +13,6 @@ const testStream = resumer();
 testStream.pipe(process.stdout);
 hookLoader(process.cwd());
 
-testStream.queue(process.env.COVERAGE, process.env.COVERAGE === 'travis');
 testStream.queue('TAP Version 13\n');
 let renderer;
 
@@ -39,13 +38,6 @@ function finished(name, { results, coverage }) {
   progress[name] = true;
 
   if (!filter(progress, (v) => (!v)).length) {
-    if (process.env.COVERAGE === 'travis') {
-      const report = Report.create('lcovonly', {
-        dir: path.join(process.cwd(), 'test'),
-      });
-      report.writeReport(coverageCollector);
-    }
-
     testStream.queue(`\n1..${testsCollector.count}\n`);
     testStream.queue(`# tests ${testsCollector.count}\n`);
     testStream.queue(`# pass ${testsCollector.pass}\n`);
@@ -53,6 +45,12 @@ function finished(name, { results, coverage }) {
       testStream.queue(`# fail ${testsCollector.fail}\n`);
     } else {
       testStream.queue('\n# ok\n');
+
+      const reportType = (process.env.COVERAGE === 'travis' ? 'lcovonly' : 'html');
+      const report = Report.create(reportType, {
+        dir: path.join(process.cwd(), 'coverage'),
+      });
+      report.writeReport(coverageCollector);
     }
     app.exit(testsCollector.fail ? 1 : 0);
   }

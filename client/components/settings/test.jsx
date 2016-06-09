@@ -6,7 +6,7 @@ import Settings from './index.jsx';
 
 export default function (test) {
   test('Settings Page', (assert) => {
-    assert.plan(4);
+    assert.plan(5);
     const mock = {
       client: { request: spy() },
       settings: {
@@ -14,13 +14,14 @@ export default function (test) {
       },
     };
     const element = mount(<Settings {...mock} />);
+    const newValue = 'newdev';
 
     assert.equal(element.find('input[name="tld"]').prop('value'), mock.settings.tld,
       'Shows existing tld');
-    element.find('input[name="tld"]').simulate('change', { target: { value: 'newdev' } });
+    element.find('input[name="tld"]').simulate('change', { target: { value: newValue } });
     element.find('button[value="Update"]').simulate('click');
 
-    assert.equal(mock.client.request.calledWith('updateSettings', { tld: 'newdev' }), true,
+    assert.equal(mock.client.request.calledWith('updateSettings', { tld: newValue }), true,
       'Saves with new tld');
     assert.equal(mock.client.request.calledWith('setPage', 'home'), true,
       'Saves to home page');
@@ -29,5 +30,9 @@ export default function (test) {
     element.find('button[value="Cancel"]').simulate('click');
     assert.equal(mock.client.request.calledWith('setPage', 'home'), true,
       'Cancels to home page');
+
+    element.setProps({ settings: { tld: newValue } });
+    assert.equal(element.find('input[name="tld"]').prop('value'), newValue,
+      'Values change when new props set');
   });
 }

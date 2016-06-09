@@ -13,7 +13,7 @@ addons:
       - xvfb
 
 before_script:
-  - "sh -e /etc/init.d/xvfb start +extension RANDR"
+  - "sh -e /etc/init.d/xvfb +extension RANDR start"
   - sleep 3
 
 after_success:
