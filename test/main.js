@@ -46,16 +46,9 @@ function finished(name, { results, coverage }) {
     } else {
       testStream.queue('\n# ok\n');
 
-      let report;
-      if (process.env.hasOwnProperty('TRAVIS')) {
-        report = Report.create('lcovonly', {
-          dir: path.join(process.cwd(), 'test'),
-        });
-      } else {
-        report = Report.create('html', {
-          dir: path.join(process.cwd(), 'coverage'),
-        });
-      }
+      const report = Report.create('lcov', {
+        dir: path.join(process.cwd(), 'coverage'),
+      });
       report.writeReport(coverageCollector);
     }
     app.exit(testsCollector.fail ? 1 : 0);
