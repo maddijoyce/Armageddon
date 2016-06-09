@@ -13,6 +13,7 @@ const testStream = resumer();
 testStream.pipe(process.stdout);
 hookLoader(process.cwd());
 
+testStream.queue(process.env.COVERAGE, process.env.COVERAGE === 'travis');
 testStream.queue('TAP Version 13\n');
 let renderer;
 
@@ -38,7 +39,7 @@ function finished(name, { results, coverage }) {
   progress[name] = true;
 
   if (!filter(progress, (v) => (!v)).length) {
-    if (process.env.COVERAGE) {
+    if (process.env.COVERAGE === 'travis') {
       const report = Report.create('lcovonly', {
         dir: path.join(process.cwd(), 'test'),
       });

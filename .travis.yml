@@ -3,7 +3,7 @@ sudo: required
 node_js:
   - '4.3.2'
 env:
-  - CXX=g++-4.8 DISPLAY=':99.0' COVERAGE=true
+  - CXX=g++-4.8 DISPLAY=':99.0' COVERAGE='travis'
 addons:
   apt:
     sources:
