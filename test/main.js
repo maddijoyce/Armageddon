@@ -47,7 +47,7 @@ function finished(name, { results, coverage }) {
       testStream.queue('\n# ok\n');
 
       let report;
-      if (process.env.COVERAGE === 'travis') {
+      if (process.env.hasOwnProperty('TRAVIS')) {
         report = Report.create('lcovonly', {
           dir: path.join(process.cwd(), 'test'),
         });
