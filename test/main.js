@@ -74,7 +74,7 @@ function mainTests() {
     each(files, (file) => {
       const filePath = path.resolve(process.cwd(), file);
       const fileTest = require(filePath).default; // eslint-disable-line global-require
-      fileTest(testHarness);
+      if (fileTest) fileTest(testHarness);
     });
     testHarness.onFinish(() => {
       const results = pick(testHarness._results, [ // eslint-disable-line no-underscore-dangle
