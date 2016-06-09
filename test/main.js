@@ -46,10 +46,16 @@ function finished(name, { results, coverage }) {
     } else {
       testStream.queue('\n# ok\n');
 
-      const reportType = (process.env.COVERAGE === 'travis' ? 'lcovonly' : 'html');
-      const report = Report.create(reportType, {
-        dir: path.join(process.cwd(), 'coverage'),
-      });
+      let report;
+      if (process.env.COVERAGE === 'travis') {
+        report = Report.create('lcovonly', {
+          dir: path.join(process.cwd(), 'test'),
+        });
+      } else {
+        report = Report.create('html', {
+          dir: path.join(process.cwd(), 'coverage'),
+        });
+      }
       report.writeReport(coverageCollector);
     }
     app.exit(testsCollector.fail ? 1 : 0);
