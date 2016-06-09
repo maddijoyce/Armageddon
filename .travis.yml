@@ -13,7 +13,7 @@ addons:
       - xvfb
 
 before_script:
-  - "sh -e Xvfb :99 -screen 0 1024x768x24 -ac +extension GLX +extension RANDR +render -noreset"
+  - "sh -e /etc/init.d/xvfb start"
   - sleep 3
 
 after_success:
