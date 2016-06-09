@@ -35,9 +35,9 @@
     "vhost": "^3.0.2"
   },
   "devDependencies": {
-    "babelify": "^7.3.0",
-    "browserify": "^13.0.1",
-    "css-modulesify": "^0.24.0",
+    "babel-core": "^6.9.1",
+    "babel-istanbul": "^0.8.0",
+    "coveralls": "^2.11.9",
     "electron-ipc-stream": "^0.2.0",
     "electron-prebuilt": "^1.1.0",
     "electron-reload": "^0.3.0",
@@ -47,22 +47,25 @@
     "eslint-plugin-import": "^1.8.1",
     "eslint-plugin-jsx-a11y": "^1.2.0",
     "eslint-plugin-react": "^5.1.1",
+    "fsevents": "^1.0.12",
     "glob": "^7.0.3",
     "nyc": "^6.4.4",
     "path": "^0.12.7",
     "react-addons": "^0.9.1-deprecated",
     "react-addons-test-utils": "^15.1.0",
+    "resumer": "0.0.0",
     "sinon": "^1.17.4",
+    "stream-filter": "^1.0.0",
     "stylelint": "^6.3.3",
     "stylelint-config-suitcss": "^6.0.0",
     "tape": "^4.5.1",
-    "tape-catch": "^1.0.5",
-    "tape-run": "^2.1.4"
+    "tape-catch": "^1.0.5"
   },
   "scripts": {
     "start": "electron .",
     "lint": "stylelint 'client/**/*.css' && eslint .",
-    "test": "electron test/bootstrapper.js"
+    "test": "electron test/bootstrapper.js",
+    "coverage": "cat test/lcov.info | coveralls"
   },
   "eslintConfig": {
     "extends": [

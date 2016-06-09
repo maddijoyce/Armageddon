@@ -10,6 +10,11 @@
       const test = require('tape-catch');
       const path = require('path');
       const { pick } = require('lodash');
+      const { hookLoader } = require('./hookLoader.js');
+
+      hookLoader(process.cwd(), {
+        extensions: ['.js', '.jsx'],
+      });
 
       ipcRenderer.on('tests:start', (event, { files }) => {
         const testHarness = test.createHarness();
@@ -27,7 +32,8 @@
             'pass',
             'fail',
           ]);
-          ipcRenderer.send('tests:end', results);
+          const coverage = global.coverage;
+          ipcRenderer.send('tests:end', { results, coverage });
         });
       });
     </script>

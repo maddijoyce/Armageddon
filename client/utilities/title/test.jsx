@@ -16,7 +16,5 @@ export default function (test) {
 
     element = shallow(<Title label={mock.label} icon={false} />);
     assert.equal(element.find('img').length, 0, 'Able to hide icon');
-
-    assert.end();
   });
-};
+}
