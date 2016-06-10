@@ -13,7 +13,7 @@ addons:
       - xvfb
 
 before_script:
-   - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/electron_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16 +extension RANDR
+   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/electron_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16 +extension RANDR"
   - sleep 3
 
 after_success:
