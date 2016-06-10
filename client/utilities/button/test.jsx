@@ -8,7 +8,7 @@ import Bar from './bar.jsx';
 
 export default function (test) {
   test('Button', (assert) => {
-    assert.plan(5);
+    assert.plan(6);
     const mock = {
       name: 'Save',
       label: 'Save',
@@ -26,6 +26,11 @@ export default function (test) {
     element.find('button').simulate('click');
     assert.equal(mock.action.calledOnce, true, 'Responds to click once');
     assert.equal(mock.action.calledWith(mock.name), true, 'Responds to click with button name');
+
+    mock.action.reset();
+    element.setProps({ action: null });
+    element.find('button').simulate('click');
+    assert.equal(mock.action.calledOnce, false, 'No action when function when set');
   });
 
   test('Button Bar', (assert) => {

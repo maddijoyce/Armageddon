@@ -17,7 +17,7 @@ class Settings extends React.Component {
   }
 
   componentWillReceiveProps({ settings }) {
-    if (settings) this.setState(settings);
+    this.setState(settings);
   }
 
   setPage(page) {

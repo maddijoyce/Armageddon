@@ -7,7 +7,6 @@ const propTypes = {
   style: PropTypes.string.isRequired,
   fixed: PropTypes.bool,
   size: PropTypes.string,
-  colour: PropTypes.string,
   animation: PropTypes.string,
   loading: PropTypes.bool.isRequired,
 };
@@ -17,17 +16,17 @@ const defaultProps = {
   loading: false,
 };
 
-const Icon = ({ name, style, fixed, size, colour, animation, loading }) => {
+const Icon = ({ name, style, fixed, size, animation, loading }) => {
+  const icon = loading ? 'sync' : name;
   const classes = compact([
     css[`bt${style.charAt(0)}`],
-    css[`bt-${loading ? 'sync' : name}`],
+    css[`bt-${icon}`],
     (fixed ? css['bt-fw'] : null),
     (size ? css[`bt-${size}`] : null),
-    (colour ? css[`${colour} fg`] : null),
     ((animation || loading) ? css[`bt-${loading ? 'spin' : animation}`] : null),
   ]).join(' ');
 
-  return <i className={classes} alt={`${name} icon`} />;
+  return <i className={classes} alt={`${icon} icon`} />;
 };
 
 Icon.propTypes = propTypes;

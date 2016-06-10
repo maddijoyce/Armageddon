@@ -4,13 +4,16 @@
     <script>
       // Adding Babel Hooks in Renderer Process
       require('babel-register');
-      require('css-modules-require-hook/preset');
+      const css = require('css-modules-require-hook');
+      const cssConfig = require('../client/cmrh.conf.js');
       const { ipcRenderer } = require('electron'); // eslint-disable-line import/no-unresolved
       const IpcStream = require('electron-ipc-stream');
       const test = require('tape-catch');
       const path = require('path');
       const { pick } = require('lodash');
       const { hookLoader } = require('./hookLoader.js');
+
+      css(cssConfig);
 
       hookLoader(process.cwd(), {
         extensions: ['.js', '.jsx'],

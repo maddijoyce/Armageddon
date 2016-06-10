@@ -20,16 +20,14 @@ class CheckBox extends Field {
 
   render() {
     const { label, value } = this.props;
-    const { focus } = this.state;
 
     const classes = compact([
       css.Field,
       (value ? css['Field--checked'] : null),
-      (focus ? css['Field--focus'] : null),
     ]).join(' ');
 
     return (
-      <div className={classes}>
+      <div ref="field" className={classes}>
         <input
           type="checkbox"
           className={css['Field-checkbox']}

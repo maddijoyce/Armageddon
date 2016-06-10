@@ -52,16 +52,14 @@ class Field extends React.Component {
 
   render() {
     const { icon, label, value } = this.props;
-    const { focus } = this.state;
 
     const classes = compact([
       css.Field,
       (value ? css['Field--full'] : null),
-      (focus ? css['Field--focus'] : null),
     ]).join(' ');
 
     return (
-      <div className={classes}>
+      <div ref="field" className={classes}>
         {this.renderInput()}
         <label className={css['Field-label']}>
           <Icon name={icon} />
