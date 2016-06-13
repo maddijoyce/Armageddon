@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { map, pick } from 'lodash';
 
 export function sanitizeData(content) {
@@ -11,9 +11,9 @@ export function sanitizeData(content) {
 }
 
 export function readJSONFile(file) {
-  return sanitizeData(JSON.parse(fs.readFileSync(file, 'w').toString()));
+  return sanitizeData(JSON.parse(readFileSync(file, { encoding: 'utf8' }).toString()));
 }
 
 export function writeJSONFile(file, content) {
-  return fs.writeFile(file, JSON.stringify(sanitizeData(content)));
+  return writeFileSync(file, JSON.stringify(sanitizeData(content)));
 }

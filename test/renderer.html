@@ -5,19 +5,20 @@
       // Adding Babel Hooks in Renderer Process
       require('babel-register');
       const css = require('css-modules-require-hook');
-      const cssConfig = require('../client/cmrh.conf.js');
       const { ipcRenderer } = require('electron'); // eslint-disable-line import/no-unresolved
       const IpcStream = require('electron-ipc-stream');
       const test = require('tape-catch');
       const path = require('path');
       const { pick } = require('lodash');
-      const { hookLoader } = require('./hookLoader.js');
-
-      css(cssConfig);
+      const { hookLoader, getCoverageObject } = require('./hookLoader.js');
 
       hookLoader(process.cwd(), {
+        coverageVariable: 'rendererCoverage',
         extensions: ['.js', '.jsx'],
       });
+
+      const cssConfig = require('../client/cmrh.conf.js');
+      css(cssConfig);
 
       ipcRenderer.on('tests:start', (event, { files }) => {
         const testHarness = test.createHarness();
@@ -26,8 +27,10 @@
 
         files.forEach((file) => {
           const filePath = path.resolve(process.cwd(), file);
-          const fileTest = require(filePath).default; // eslint-disable-line global-require
-          if (fileTest) fileTest(testHarness);
+          const fileTest = require(filePath); // eslint-disable-line global-require
+          if (filePath.match(/test/) && fileTest && fileTest.default) {
+            fileTest.default(testHarness);
+          }
         });
         testHarness.onFinish(() => {
           const results = pick(testHarness._results, [ // eslint-disable-line no-underscore-dangle
@@ -35,7 +38,7 @@
             'pass',
             'fail',
           ]);
-          const coverage = global.coverage;
+          const coverage = getCoverageObject('rendererCoverage');
           ipcRenderer.send('tests:end', { results, coverage });
         });
       });

@@ -14,9 +14,15 @@ export default function (test) {
         tld: 'dev',
       },
     };
-    let element = mount(<Settings {...mock} />);
+    const element = mount(<Settings client={mock.client} />);
     const newValue = 'newdev';
 
+    assert.equal(element.find('input[name="tld"]').length, 0,
+      'No inputs before settings are loaded');
+    assert.equal(element.contains(<Loading />), true,
+      'Loading bar before settings are loaded');
+
+    element.setProps({ settings: mock.settings });
     assert.equal(element.find('input[name="tld"]').prop('value'), mock.settings.tld,
       'Shows existing tld');
     element.find('input[name="tld"]').simulate('change', { target: { value: newValue } });
@@ -39,10 +45,5 @@ export default function (test) {
     assert.equal(element.find('input[name="tld"]').prop('value'), newValue,
       'Values don\'t change when new props without settings set');
 
-    element = mount(<Settings client={mock.client} />);
-    assert.equal(element.find('input[name="tld"]').length, 0,
-      'No inputs before settings are loaded');
-    assert.equal(element.contains(<Loading />), true,
-      'Loading bar before settings are loaded');
   });
 }

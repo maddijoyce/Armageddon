@@ -7,11 +7,14 @@ import test from 'tape-catch';
 import streamFilter from 'stream-filter';
 import resumer from 'resumer';
 import { Collector, Report } from 'babel-istanbul';
-import { hookLoader } from './hookLoader.js';
+import { hookLoader, getCoverageObject } from './hookLoader.js';
 
 const testStream = resumer();
 testStream.pipe(process.stdout);
-hookLoader(process.cwd());
+hookLoader(process.cwd(), {
+  coverageVariable: 'mainCoverage',
+  extensions: ['.js', '.jsx'],
+});
 
 testStream.queue('TAP Version 13\n');
 let renderer;
@@ -65,15 +68,17 @@ function testFilter(data) {
 
 // Main Tests
 function mainTests() {
-  glob('server/**/test.js', (error, files) => {
+  glob('server/**/*.{js,jsx}', (error, files) => {
     const testHarness = test.createHarness();
     testHarness._results.count = testsCollector.count; // eslint-disable-line no-underscore-dangle
     testHarness.createStream().pipe(streamFilter(testFilter)).pipe(process.stdout);
     if (error) throw error;
     each(files, (file) => {
       const filePath = path.resolve(process.cwd(), file);
-      const fileTest = require(filePath).default; // eslint-disable-line global-require
-      if (fileTest) fileTest(testHarness);
+      const fileTest = require(filePath); // eslint-disable-line global-require
+      if (filePath.match(/test/) && fileTest && fileTest.default) {
+        fileTest.default(testHarness);
+      }
     });
     testHarness.onFinish(() => {
       const results = pick(testHarness._results, [ // eslint-disable-line no-underscore-dangle
@@ -81,7 +86,7 @@ function mainTests() {
         'pass',
         'fail',
       ]);
-      const coverage = global.coverage;
+      const coverage = getCoverageObject('mainCoverage');
       finished('main', { results, coverage });
     });
   });
@@ -103,7 +108,7 @@ app.on('ready', () => {
     finished('renderer', tests);
     mainTests();
   });
-  glob('client/**/test.jsx', (error, files) => {
+  glob('client/**/*.{js,jsx}', (error, files) => {
     if (error) throw error;
     renderer.webContents.on('dom-ready', () => {
       renderer.send('tests:start', { files });

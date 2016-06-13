@@ -21,7 +21,7 @@ class Edit extends React.Component {
   }
 
   componentWillReceiveProps({ app }) {
-    if (app) this.setState(app);
+    this.setState(app);
   }
 
   setPage(page) {

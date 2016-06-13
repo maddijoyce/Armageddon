@@ -4,9 +4,10 @@ import { clone } from 'lodash';
 let instrumenter = null;
 const baselineCoverage = {};
 
-export function getCoverageObject() {
-  global.coverage = global.coverage || {};
-  return global.coverage;
+export function getCoverageObject(coverageVariable) {
+  const variable = coverageVariable || 'coverage';
+  global[variable] = global[variable] || {};
+  return global[variable];
 }
 
 export function getRootMatcher(root) {
@@ -58,7 +59,7 @@ export function hookLoader(matcherOrRoot, customOpts) {
   let postLoadHook;
 
   const opts = customOpts || {};
-  opts.coverageVariable = 'coverage';
+  opts.coverageVariable = opts.coverageVariable || 'coverage';
 
   postLoadHook = opts.postLoadHook;
   if (!(postLoadHook && typeof postLoadHook === 'function')) {

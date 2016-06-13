@@ -63,7 +63,7 @@
   "scripts": {
     "start": "electron .",
     "lint": "stylelint 'client/**/*.css' && eslint .",
-    "test": "electron test/bootstrapper.js",
+    "test": "rm -rf coverage && electron test/bootstrapper.js",
     "coverage": "cat coverage/lcov.info | coveralls"
   },
   "eslintConfig": {

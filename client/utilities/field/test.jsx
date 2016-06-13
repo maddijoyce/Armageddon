@@ -90,7 +90,7 @@ export default function (test) {
     assert.equal(element.find('input').prop('checked'), mock.value, 'Renders a check with value');
     assert.equal(element.find('label').text(), mock.label, 'Renders a custom label');
 
-    element.find('input').simulate('click');
+    element.find('input').simulate('change', { target: { value: !mock.value } });
     assert.equal(mock.change.calledOnce, true, 'Responds to click');
     assert.equal(mock.change.calledWith(mock.name, !mock.value), true,
       'Responds to file change with name and value');
