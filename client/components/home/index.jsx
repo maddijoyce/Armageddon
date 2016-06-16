@@ -20,7 +20,7 @@ class Home extends React.Component {
 
   setPage(page) {
     const { client } = this.props;
-    client.request('setPage', page);
+    client.request('page.set', page);
   }
 
   renderApps() {

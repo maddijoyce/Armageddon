@@ -46,15 +46,15 @@ function finished(name, { results, coverage }) {
     testStream.queue(`# pass ${testsCollector.pass}\n`);
     if (testsCollector.fail) {
       testStream.queue(`# fail ${testsCollector.fail}\n`);
+      app.exit(1);
     } else {
       testStream.queue('\n# ok\n');
-
       const report = Report.create('lcov', {
         dir: path.join(process.cwd(), 'coverage'),
       });
-      report.writeReport(coverageCollector);
+      report.writeReport(coverageCollector, true);
+      app.exit(0);
     }
-    app.exit(testsCollector.fail ? 1 : 0);
   }
 }
 
@@ -95,7 +95,7 @@ function mainTests() {
 // Renderer Tests
 app.on('ready', () => {
   renderer = new BrowserWindow({ width: 600, height: 600 });
-  // renderer.hide();
+  renderer.hide();
   renderer.webContents.openDevTools();
   renderer.loadURL(`file://${__dirname}/renderer.html`);
   renderer.on('closed', () => {

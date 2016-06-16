@@ -22,7 +22,7 @@ class Settings extends React.Component {
 
   setPage(page) {
     const { client } = this.props;
-    client.request('setPage', page);
+    client.request('page.set', page);
   }
 
   setValue(name, value) {
@@ -33,8 +33,8 @@ class Settings extends React.Component {
 
   updateSettings(page) {
     const { client } = this.props;
-    client.request('updateSettings', this.state);
-    client.request('setPage', page);
+    client.request('settings.update', this.state);
+    client.request('page.set', page);
   }
 
   renderForm() {

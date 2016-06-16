@@ -4,7 +4,7 @@ import connect from 'connect';
 import proxy from 'http-proxy-middleware';
 import vhost from 'vhost';
 import portfinder from 'portfinder';
-import sudo from './sudo.js';
+import sudo from '../sudo';
 
 function startApp({ host, directory }) {
   return new Promise((resolve, reject) => {

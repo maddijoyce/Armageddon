@@ -1,15 +1,20 @@
 const proxy = require('http-proxy');
 
-const args = process.argv.slice(2);
-const port = args[0];
-
-if (port) {
+function rootProxy(port) {
   const options = {
     target: `http://localhost:${port}`,
     ws: true,
     xfwd: true,
   };
-  proxy.createProxyServer(options).listen(80);
-  proxy.createProxyServer(options).listen(443);
+  const server = proxy.createProxyServer(options).listen(80);
+  return server;
+}
+
+if (require.main === module) {
+  const args = process.argv.slice(2);
+  const port = args[0];
+  rootProxy(port);
   console.log('Root Proxy Started');
 }
+
+module.exports = rootProxy;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Client from 'electron-rpc/client';
 
 import { Title } from '../../utilities';
@@ -16,7 +16,7 @@ const pages = {
   add: {
     title: 'Add App',
     body: Edit,
-    app: { new: true, active: true },
+    app: { active: true },
   },
   edit: {
     body: Edit,
@@ -27,9 +27,17 @@ const pages = {
   },
 };
 
+const propTypes = {
+  client: PropTypes.object,
+};
+
+const defaultProps = {
+  client: new Client(),
+};
+
 class Menu extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       page: pages.home,
       settings: null,
@@ -37,20 +45,25 @@ class Menu extends React.Component {
       app: null,
     };
 
-    this.client = new Client();
-    this.client.on('pageChanged', (e, newPage) => {
+    const { client } = props;
+    client.on('page.changed', (e, newPage) => {
       const { apps } = this.state;
       const [page, app] = newPage.split('/');
-      this.setState({ page: pages[page], app: (apps || [])[app] });
+      this.setState({ page: pages[page] });
+      if (apps && app) {
+        this.setState({ app: apps[app] });
+      } else {
+        this.setState({ app: null });
+      }
     });
-    this.client.on('settingsChanged', (e, settings) => {
+    client.on('settings.changed', (e, settings) => {
       this.setState({ settings });
-      this.client.request('initializeApps', { settings });
+      client.request('apps.initialize', { settings });
     });
-    this.client.on('appsChanged', (e, apps) => {
+    client.on('apps.changed', (e, apps) => {
       this.setState({ apps });
     });
-    this.client.request('initializeSettings');
+    client.request('settings.initialize');
   }
 
   render() {
@@ -60,13 +73,16 @@ class Menu extends React.Component {
       apps,
       app,
     } = this.state;
+    const {
+      client,
+    } = this.props;
 
     return (
       <div className={css.Menu}>
-        <Title label={page.title || app.domain} />
+        <Title label={page.title || (app && app.domain)} />
         <div className={css.Body}>
           <page.body
-            client={this.client}
+            client={client}
             settings={settings}
             apps={apps}
             app={app || page.app}
@@ -76,5 +92,8 @@ class Menu extends React.Component {
     );
   }
 }
+
+Menu.propTypes = propTypes;
+Menu.defaultProps = defaultProps;
 
 export default Menu;

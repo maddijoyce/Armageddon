@@ -28,14 +28,14 @@ export default function (test) {
     element.find('input[name="tld"]').simulate('change', { target: { value: newValue } });
     element.find('button[value="Update"]').simulate('click');
 
-    assert.equal(mock.client.request.calledWith('updateSettings', { tld: newValue }), true,
+    assert.equal(mock.client.request.calledWith('settings.update', { tld: newValue }), true,
       'Saves with new tld');
-    assert.equal(mock.client.request.calledWith('setPage', 'home'), true,
+    assert.equal(mock.client.request.calledWith('page.set', 'home'), true,
       'Saves to home page');
 
     mock.client.request.reset();
     element.find('button[value="Cancel"]').simulate('click');
-    assert.equal(mock.client.request.calledWith('setPage', 'home'), true,
+    assert.equal(mock.client.request.calledWith('page.set', 'home'), true,
       'Cancels to home page');
 
     element.setProps({ settings: { tld: newValue } });

@@ -21,12 +21,12 @@ class Edit extends React.Component {
   }
 
   componentWillReceiveProps({ app }) {
-    this.setState(app);
+    this.setState(app || {});
   }
 
   setPage(page) {
     const { client } = this.props;
-    client.request('setPage', page);
+    client.request('page.set', page);
   }
 
   setValue(name, value) {
@@ -44,15 +44,15 @@ class Edit extends React.Component {
   saveApp(page) {
     const app = this.state;
     const { client, settings } = this.props;
-    client.request('updateApp', { settings, app });
-    client.request('setPage', page);
+    client.request('app.update', { settings, app });
+    client.request('page.set', page);
   }
 
   deleteApp(page) {
     const app = this.state;
     const { client, settings } = this.props;
-    client.request('deleteApp', { settings, app });
-    client.request('setPage', page);
+    client.request('app.delete', { settings, app });
+    client.request('page.set', page);
   }
 
   render() {
@@ -69,13 +69,13 @@ class Edit extends React.Component {
             colour="silver"
             action={this.setPage}
           />
-          {this.state.new ? '' : <Button
+          {this.state.id ? <Button
             name="home"
             label="Delete"
             icon="minus"
             colour="red"
             action={this.deleteApp}
-          />}
+          /> : ''}
           <Button
             name="home"
             label="Save"

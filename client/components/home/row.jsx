@@ -23,10 +23,11 @@ class Row extends React.Component {
 
   edit() {
     const { client, id } = this.props;
-    client.request('setPage', `edit/${id}`);
+    client.request('page.set', `edit/${id}`);
   }
+
   logs() {
-    console.log('aoeu');
+    // TODO - Add Logs
   }
 
   open(event) {
@@ -53,7 +54,7 @@ class Row extends React.Component {
       icon = 'pause';
     }
 
-    return (<h4 className={classes.join(' ')}>
+    return (<h4 ref="status" className={classes.join(' ')}>
       <Icon name={icon} style="solid" fixed /> {status}
     </h4>);
   }

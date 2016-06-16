@@ -1,19 +1,28 @@
 import { readFileSync, writeFileSync } from 'fs';
-import { map, pick } from 'lodash';
+import { fromPairs, map, pick, compact } from 'lodash';
 
-export function sanitizeData(content) {
-  return map(content, (c) => (pick(c, [
+export function sanitizeApps(content) {
+  return fromPairs(compact(map(content, (c) => (c.id ? [c.id, pick(c, [
     'id',
     'active',
     'directory',
     'domain',
-  ])));
+  ])] : null))));
 }
 
-export function readJSONFile(file) {
-  return sanitizeData(JSON.parse(readFileSync(file, { encoding: 'utf8' }).toString()));
+export function sanitizeSettings(content) {
+  return pick(content, [
+    'tld',
+  ]);
 }
 
-export function writeJSONFile(file, content) {
-  return writeFileSync(file, JSON.stringify(sanitizeData(content)));
+export function readJSONFile(path, sanitize) {
+  const data = readFileSync(path, { encoding: 'utf8' });
+  const json = JSON.parse(data.toString());
+  return sanitize(json);
+}
+
+export function writeJSONFile(path, data, sanitize) {
+  const json = JSON.stringify(sanitize(data));
+  return writeFileSync(path, json);
 }
