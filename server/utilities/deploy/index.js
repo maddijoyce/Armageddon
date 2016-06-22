@@ -6,7 +6,48 @@ import vhost from 'vhost';
 import portfinder from 'portfinder';
 import sudo from '../sudo';
 
-function startApp({ host, directory }) {
+export function addHost({ host }) {
+  return new Promise((resolve) => {
+    sudo({
+      module: 'hostile',
+      method: 'set',
+      params: ['127.0.0.1', host],
+    }, () => {
+      resolve();
+    });
+  });
+}
+
+export function removeHost({ host }) {
+  return new Promise((resolve) => {
+    sudo({
+      module: 'hostile',
+      method: 'remove',
+      params: ['127.0.0.1', host],
+    }, () => {
+      resolve();
+    });
+  });
+}
+
+export function startProxy({ port }) {
+  const proxyApp = connect().use(proxy({
+    target: `http://localhost:${port}`,
+    ws: true,
+    xfwd: true,
+    changeOrigin: true,
+    logLevel: 'silent',
+  }));
+
+  return { proxyApp };
+}
+
+export function removeMiddleware(mainProxy, handle) {
+  const index = findIndex(mainProxy.stack, (s) => (s.handle === handle));
+  if (index >= 0) mainProxy.stack.splice(index, 1);
+}
+
+export function startApp({ host, directory }) {
   return new Promise((resolve, reject) => {
     portfinder.getPort((error, port) => {
       if (error) reject(error);
@@ -30,18 +71,7 @@ function startApp({ host, directory }) {
   });
 }
 
-function startProxy({ port }) {
-  const proxyApp = connect().use(proxy({
-    target: `http://localhost:${port}`,
-    ws: true,
-    xfwd: true,
-    changeOrigin: true,
-  }));
-
-  return { proxyApp };
-}
-
-function killApp({ active, meteor }) {
+export function killApp({ active, meteor }) {
   return new Promise((resolve) => {
     if (active && meteor) {
       meteor.on('close', (code, signal) => {
@@ -52,55 +82,6 @@ function killApp({ active, meteor }) {
       resolve();
     }
   });
-}
-
-function removeHost({ host }) {
-  return new Promise((resolve, reject) => {
-    sudo({
-      module: 'hostile',
-      method: 'remove',
-      params: ['127.0.0.1', host],
-    }, (error) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve();
-      }
-    });
-  });
-}
-
-function addHost({ host }) {
-  return new Promise((resolve, reject) => {
-    sudo({
-      module: 'hostile',
-      method: 'set',
-      params: ['127.0.0.1', host],
-    }, (error) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve();
-      }
-    });
-  });
-}
-
-export function removeMiddleware(mainProxy, handle) {
-  const index = findIndex(mainProxy.stack, (s) => (s.handle === handle));
-  if (index >= 0) mainProxy.stack.splice(index, 1);
-}
-
-export function undeployApp({ app, mainProxy }) {
-  let promise = Promise.resolve();
-
-  if (app) {
-    removeMiddleware(mainProxy, app.vhost);
-    promise = removeHost(app)
-    .then(() => (killApp(app)));
-  }
-
-  return promise;
 }
 
 export function deployApp({ app, settings, mainProxy }) {
@@ -127,6 +108,19 @@ export function deployApp({ app, settings, mainProxy }) {
   } else {
     promise = addHost(newApp)
     .then(() => (newApp));
+  }
+
+  return promise;
+}
+
+
+export function undeployApp({ app, mainProxy }) {
+  let promise = Promise.resolve();
+
+  if (app) {
+    removeMiddleware(mainProxy, app.vhost);
+    promise = removeHost(app)
+    .then(() => (killApp(app)));
   }
 
   return promise;
