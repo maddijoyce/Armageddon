@@ -40,6 +40,7 @@ class Settings extends React.Component {
   renderForm() {
     const { tld } = this.state;
     return (<div>
+      <h5><span>Armageddon Options</span></h5>
       <Field
         name="tld"
         label="Top Level Domain"

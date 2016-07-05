@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { spy } from 'sinon';
+import { spy, stub } from 'sinon';
 import { includes } from 'lodash';
 
 import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
@@ -35,8 +35,8 @@ export default function (test) {
     element.find('input').simulate('change', { target: { value: newValue } });
     assert.equal(mock.change.calledOnce, false, 'No change when function not set');
 
-    element.find('input').simulate('click');
-    assert.equal(mock.change.calledOnce, false, 'No change on click');
+    element.find('input').simulate('focus');
+    assert.equal(mock.change.calledOnce, false, 'No change on focus');
   });
 
   test('File', (assert) => {
@@ -56,8 +56,8 @@ export default function (test) {
 
     const newValue = '/fake/directory/path';
     const originalDialog = remote.dialog.showOpenDialog;
-    remote.dialog.showOpenDialog = spy(() => ([newValue]));
-    element.find('input').simulate('click');
+    remote.dialog.showOpenDialog = stub().returns([newValue]);
+    element.find('input').simulate('focus');
     assert.equal(remote.dialog.showOpenDialog.calledOnce, true, 'Responds to click with dialog');
     assert.equal(mock.change.calledOnce, true, 'Responds to file change');
     assert.equal(mock.change.calledWith(mock.name, newValue), true,
@@ -65,19 +65,19 @@ export default function (test) {
 
     mock.change.reset();
     element.setProps({ change: null });
-    element.find('input').simulate('click');
+    element.find('input').simulate('focus');
     assert.equal(mock.change.calledOnce, false, 'No change when function not set');
 
     element.setProps({ change: mock.change });
-    remote.dialog.showOpenDialog = spy(() => (null));
-    element.find('input').simulate('click');
-    assert.equal(mock.change.calledOnce, false, 'No change when nothing selected');
+    remote.dialog.showOpenDialog = stub().returns(null);
+    element.find('input').simulate('focus');
+    assert.equal(mock.change.calledWith(mock.name, ''), true, 'Change to nothing');
 
     remote.dialog.showOpenDialog = originalDialog;
   });
 
   test('CheckBox', (assert) => {
-    assert.plan(7);
+    assert.plan(8);
     const mock = {
       name: 'active',
       label: 'Active',
@@ -95,10 +95,14 @@ export default function (test) {
     assert.equal(mock.change.calledWith(mock.name, !mock.value), true,
       'Responds to file change with name and value');
 
+    element.setProps({ error: 'SpecialError' });
+    assert.equal(includes(element.text(), 'SpecialError'), true,
+      'Shows error as needed');
+
     mock.change.reset();
     element.setProps({ change: null });
-    element.find('input').simulate('click');
-    assert.equal(mock.change.calledOnce, false, 'No change when function when set');
+    element.find('input').simulate('change', { target: { value: !mock.value } });
+    assert.equal(mock.change.calledOnce, false, 'No change when function not set');
 
     element.setProps({ value: true });
     assert.equal(includes(element.ref('field').prop('className'), 'Field--checked'), true,

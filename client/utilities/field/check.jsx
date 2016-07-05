@@ -10,11 +10,19 @@ const propTypes = extend(clone(Field.propTypes), {
 });
 
 class CheckBox extends Field {
+  onChange(event) {
+    const { name, change, value } = this.props;
+    if (change) {
+      change(name, !value, event);
+    }
+  }
+
   render() {
-    const { label, value } = this.props;
+    const { label, value, error } = this.props;
 
     const classes = compact([
       css.Field,
+      (error ? css['Field--error'] : null),
       (value ? css['Field--checked'] : null),
     ]).join(' ');
 
@@ -28,9 +36,10 @@ class CheckBox extends Field {
           checked={value}
           onChange={this.onChange}
         />
-        <label className={css['Field-label']}>
+        <label htmlFor={name} className={css['Field-label']}>
           <Icon name={value ? 'checkbox-checked' : 'checkbox-unchecked'} />
           <span className={css['Field-label-text']}>{label}</span>
+          {this.renderError()}
         </label>
         <div className={css['Field-bar']} />
       </div>

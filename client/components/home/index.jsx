@@ -8,6 +8,7 @@ import css from './row.css';
 const propTypes = {
   client: PropTypes.object.isRequired,
   apps: PropTypes.object,
+  errors: PropTypes.object,
   settings: PropTypes.object,
 };
 
@@ -15,6 +16,7 @@ class Home extends React.Component {
   constructor() {
     super();
     this.setPage = this.setPage.bind(this);
+    this.quit = this.quit.bind(this);
     this.renderApps = this.renderApps.bind(this);
   }
 
@@ -23,8 +25,13 @@ class Home extends React.Component {
     client.request('page.set', page);
   }
 
+  quit() {
+    const { client } = this.props;
+    client.request('quit');
+  }
+
   renderApps() {
-    const { apps, settings, client } = this.props;
+    const { apps, settings, client, errors } = this.props;
 
     if (!apps || !settings) {
       return <Loading />;
@@ -33,7 +40,7 @@ class Home extends React.Component {
     }
 
     const { tld } = settings;
-    return map(apps, (a, k) => (<Row key={k} client={client} tld={tld} {...a} />));
+    return map(apps, (a, k) => (<Row key={k} error={errors[k]} client={client} tld={tld} {...a} />));
   }
 
   render() {
@@ -51,6 +58,13 @@ class Home extends React.Component {
             label="Settings"
             icon="wrench"
             action={this.setPage}
+          />
+          <Button
+            name="quit"
+            label="Quit"
+            icon="times"
+            colour="red"
+            action={this.quit}
           />
         </Bar>
         <div className={css.Rows}>

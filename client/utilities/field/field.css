@@ -7,7 +7,8 @@
   width: 90%;
 }
 
-.Field-input, .Field-checkbox {
+.Field-input,
+.Field-checkbox {
   background: none;
   border: none;
   color: inherit;
@@ -22,7 +23,9 @@
 }
 
 .Field-checkbox {
+  height: 4.1rem;
   opacity: 0;
+  padding: 0;
 }
 
 .Field-input:focus { outline: none; }
@@ -36,12 +39,19 @@
   pointer-events: none;
   position: absolute;
   right: 0;
+  text-transform: uppercase;
   top: 0;
   transition: all 0.4s ease;
-  text-transform: uppercase;
 }
 
 .Field-label-text {
+  margin-left: 0.4rem;
+}
+
+.Field-label-error {
+  color: red;
+  font-size: 0.9em;
+  font-weight: bold;
   margin-left: 0.4rem;
 }
 
@@ -54,7 +64,8 @@
 
 .Field-input:hover + .Field-label,
 .Field-input:focus + .Field-label,
-.Field.Field--checked .Field-input + .Field-label,
+.Field-checkbox:hover + .Field-label,
+.Field.Field--checked .Field-checkbox + .Field-label,
 .Field.Field--focus .Field-input + .Field-label {
   color: blue;
 }
@@ -71,6 +82,7 @@
 
 .Field-input:hover ~ .Field-bar,
 .Field-input:focus ~ .Field-bar,
+.Field-checkbox:hover ~ .Field-bar,
 .Field.Field--focus .Field-input ~ .Field-bar {
   left: 0;
   width: 100%;

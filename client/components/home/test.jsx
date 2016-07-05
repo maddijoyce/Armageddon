@@ -10,7 +10,7 @@ import { Loading } from '../../utilities';
 
 export default function (test) {
   test('Home Page', (assert) => {
-    assert.plan(6);
+    assert.plan(7);
     const mock = {
       client: { request: spy() },
     };
@@ -49,12 +49,17 @@ export default function (test) {
 
     element.find('button').filterWhere((b) => (b.prop('value') === 'Add App')).simulate('click');
     assert.equal(mock.client.request.calledWith('page.set', 'add'), true,
-      'App App button available and changes page');
+      'Add App button available and changes page');
 
     mock.client.request.reset();
     element.find('button[value="Settings"]').simulate('click');
     assert.equal(mock.client.request.calledWith('page.set', 'settings'), true,
       'Settings button available and changes page');
+
+    mock.client.request.reset();
+    element.find('button[value="Quit"]').simulate('click');
+    assert.equal(mock.client.request.calledWith('quit'), true,
+      'Quit button sends quit request');
   });
 
   test('Home Page Row', (assert) => {

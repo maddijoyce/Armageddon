@@ -68,7 +68,7 @@ function testFilter(data) {
 
 // Main Tests
 function mainTests() {
-  glob('server/**/*.{js,jsx}', (error, files) => {
+  glob('{server,models}/**/*.{js,jsx}', (error, files) => {
     const testHarness = test.createHarness();
     testHarness._results.count = testsCollector.count; // eslint-disable-line no-underscore-dangle
     testHarness.createStream().pipe(streamFilter(testFilter)).pipe(process.stdout);

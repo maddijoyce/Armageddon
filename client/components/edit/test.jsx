@@ -7,7 +7,7 @@ import { Loading } from '../../utilities';
 
 export default function (test) {
   test('Edit Page', (assert) => {
-    assert.plan(10);
+    assert.plan(12);
     const mock = {
       client: { request: spy() },
       settings: {
@@ -19,9 +19,12 @@ export default function (test) {
       active: true,
       directory: '/fake/directory/path',
       domain: 'path',
+      settings: '',
+      production: false,
     };
     const newApp = {
       active: true,
+      production: false,
     };
     const newValue = 'fake';
 
@@ -43,11 +46,21 @@ export default function (test) {
       active: true,
       directory: existingApp.directory,
       domain: existingApp.domain,
+      production: existingApp.production,
     } };
     assert.equal(mock.client.request.calledWith('app.update', update), true,
       'Saves with new values');
     assert.equal(mock.client.request.calledWith('page.set', 'home'), true,
       'Saves to home page');
+
+    mock.client.request.reset();
+    element.find('input[name="domain"]').simulate('change',
+      { target: { value: '' } });
+    element.find('button[value="Save"]').simulate('click');
+    assert.equal(mock.client.request.calledOnce, false,
+      'Won\'t save if error exists');
+    assert.equal(element.state('error').domain, 'is empty',
+      'Sets error on save if needed');
 
     mock.client.request.reset();
     element.find('button[value="Cancel"]').simulate('click');

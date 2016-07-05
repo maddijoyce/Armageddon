@@ -21,7 +21,7 @@ export const prepend = [
       lime: '#01FF70',
       yellow: '#FFDC00',
       orange: '#FF851B',
-      red: '#FF4136',
+      red: '#E90D00',
       fuchsia: '#F012BE',
       purple: '#B10DC9',
       maroon: '#85144B',

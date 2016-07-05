@@ -16,7 +16,7 @@ const pages = {
   add: {
     title: 'Add App',
     body: Edit,
-    app: { active: true },
+    app: { active: true, production: false },
   },
   edit: {
     body: Edit,
@@ -43,6 +43,7 @@ class Menu extends React.Component {
       settings: null,
       apps: null,
       app: null,
+      errors: {},
     };
 
     const { client } = props;
@@ -63,6 +64,11 @@ class Menu extends React.Component {
     client.on('apps.changed', (e, apps) => {
       this.setState({ apps });
     });
+    client.on('apps.error', (e, { id, message }) => {
+      const { errors } = this.state;
+      errors[id] = message;
+      this.setState({ errors });
+    });
     client.request('settings.initialize');
   }
 
@@ -72,6 +78,7 @@ class Menu extends React.Component {
       settings,
       apps,
       app,
+      errors,
     } = this.state;
     const {
       client,
@@ -85,6 +92,7 @@ class Menu extends React.Component {
             client={client}
             settings={settings}
             apps={apps}
+            errors={errors}
             app={app || page.app}
           />
         </div>

@@ -7,3 +7,41 @@
   min-height: 95px;
   position: relative;
 }
+
+h5 {
+  font-size: 1.2rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+h5 {
+  margin: 2rem auto 1rem;
+  overflow: hidden;
+  text-align: center;
+  width: 90%;
+}
+
+h5 span {
+  display: inline-block;
+  position: relative;
+}
+
+h5 span::before,
+h5 span::after {
+  border-bottom: 1px solid gray;
+  content: "";
+  height: 0;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+}
+
+h5 span::before {
+  margin-right: 15px;
+  right: 100%;
+}
+
+h5 span::after {
+  left: 100%;
+  margin-left: 15px;
+}

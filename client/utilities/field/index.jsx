@@ -10,6 +10,7 @@ const propTypes = {
   icon: PropTypes.string,
   label: PropTypes.string,
   value: PropTypes.string,
+  error: PropTypes.string,
   change: PropTypes.func,
 };
 
@@ -24,12 +25,13 @@ class Field extends React.Component {
     this.state = {
       focus: false,
     };
-    this.onClick = this.onClick.bind(this);
+    this.onFocus = this.onFocus.bind(this);
     this.onChange = this.onChange.bind(this);
     this.renderInput = this.renderInput.bind(this);
+    this.renderError = this.renderError.bind(this);
   }
 
-  onClick() {}
+  onFocus() {}
   onChange(event) {
     const { name, change } = this.props;
     if (change) {
@@ -41,29 +43,39 @@ class Field extends React.Component {
     const { name, type, value } = this.props;
     return (<input
       className={css['Field-input']}
+      ref="input"
       name={name}
       id={name}
       type={type}
       value={value}
       onChange={this.onChange}
-      onClick={this.onClick}
+      onFocus={this.onFocus}
     />);
   }
 
+  renderError() {
+    const { error } = this.props;
+    return (<span className={css['Field-label-error']}>
+      {error}
+    </span>);
+  }
+
   render() {
-    const { icon, label, value } = this.props;
+    const { icon, label, value, error } = this.props;
 
     const classes = compact([
       css.Field,
+      (error ? css['Field--error'] : null),
       (value ? css['Field--full'] : null),
     ]).join(' ');
 
     return (
       <div ref="field" className={classes}>
         {this.renderInput()}
-        <label className={css['Field-label']}>
+        <label htmlFor={name} className={css['Field-label']}>
           <Icon name={icon} />
           <span className={css['Field-label-text']}>{label}</span>
+          {this.renderError()}
         </label>
         <div className={css['Field-bar']} />
       </div>

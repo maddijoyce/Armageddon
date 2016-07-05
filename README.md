@@ -12,5 +12,4 @@ Apps can be loaded into the menu bar interface and then accessed using a local d
 
 * xip.io
 * SSL
-* Meteor Config (Settings, etc.)
 * Log Files

@@ -9,11 +9,14 @@ import { map, fromPairs } from 'lodash';
 import {
   readJSONFile,
   writeJSONFile,
-  sanitizeApps,
   deployApp,
   undeployApp,
   removeMiddleware,
 } from '../../utilities';
+
+import {
+  App,
+} from '../../../models';
 
 export const fallbackStatic = serveStatic(`${process.cwd()}/server/root`);
 
@@ -33,18 +36,19 @@ export default function ({ server, appDataPath }) {
   });
 
   try {
-    apps = readJSONFile(appsFile, sanitizeApps);
+    apps = readJSONFile(appsFile, App.sanitize);
   } catch (e) {
     apps = defaultApps;
-    writeJSONFile(appsFile, apps, sanitizeApps);
+    writeJSONFile(appsFile, apps, App.sanitize);
   }
 
   server.on('apps.initialize', ({ body }) => {
     const { settings } = body;
 
     Promise.all(map(apps, (app) => (undeployApp({ app, settings, mainProxy }))))
-    .then(() => (Promise.all(map(apps, (app) => (deployApp({ app, settings, mainProxy }))))))
-    .then((newApps) => {
+    .then(() => (Promise.all(map(apps, (app) => (
+      deployApp({ app, settings, mainProxy, appDataPath, server })
+    ))))).then((newApps) => {
       apps = fromPairs(map(newApps, (a) => {
         mainProxy.use(a.vhost);
         return [a.id, a];
@@ -55,6 +59,7 @@ export default function ({ server, appDataPath }) {
       server.send('apps.changed', apps);
     });
   });
+
   server.on('app.update', ({ body }) => {
     const { app, settings } = body;
     delete(app.new);
@@ -66,10 +71,14 @@ export default function ({ server, appDataPath }) {
     }
 
     undeployApp({ app: apps[app.id], settings, mainProxy })
-    .then(() => (deployApp({ app, settings, mainProxy })))
+    .then(() => (deployApp({ app, settings, mainProxy, appDataPath })))
+    .then((newApp) => (newApp), ({ message }) => {
+      server.send('apps.error', { id: app.id, message });
+      return app;
+    })
     .then((newApp) => {
       apps[newApp.id] = newApp;
-      writeJSONFile(appsFile, apps, sanitizeApps);
+      writeJSONFile(appsFile, apps, App.sanitize);
 
       removeMiddleware(mainProxy, fallbackStatic);
       mainProxy.use(fallbackStatic);
@@ -83,10 +92,10 @@ export default function ({ server, appDataPath }) {
     apps[app.id].loading = 'Deleting...';
     server.send('apps.changed', apps);
 
-    undeployApp(apps[app.id], settings, mainProxy)
+    undeployApp({ app: apps[app.id], settings, mainProxy })
     .then(() => {
       delete(apps[app.id]);
-      writeJSONFile(appsFile, apps, sanitizeApps);
+      writeJSONFile(appsFile, apps, App.sanitize);
 
       server.send('apps.changed', apps);
     });

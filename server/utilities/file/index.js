@@ -1,14 +1,5 @@
 import { readFileSync, writeFileSync } from 'fs';
-import { fromPairs, map, pick, compact } from 'lodash';
-
-export function sanitizeApps(content) {
-  return fromPairs(compact(map(content, (c) => (c.id ? [c.id, pick(c, [
-    'id',
-    'active',
-    'directory',
-    'domain',
-  ])] : null))));
-}
+import { pick } from 'lodash';
 
 export function sanitizeSettings(content) {
   return pick(content, [

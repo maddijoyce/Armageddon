@@ -1,11 +1,9 @@
-import React from 'react';
 import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
 
 import Field from './index.jsx';
-import css from './field.css';
 
 class FileField extends Field {
-  onClick(event) {
+  onFocus(event) {
     const { name, change } = this.props;
     const { dialog, BrowserWindow } = remote;
     const selected = dialog.showOpenDialog(BrowserWindow.getFocusedWindow(), {
@@ -14,9 +12,10 @@ class FileField extends Field {
       properties: ['openDirectory'],
     });
 
-    if (selected && change) {
-      change(name, selected[0], event);
+    if (change) {
+      change(name, selected ? selected[0] : '', event);
     }
+    this.refs.input.blur();
   }
 }
 
