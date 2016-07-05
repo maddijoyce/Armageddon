@@ -8,7 +8,7 @@ import { Title } from '../../utilities';
 
 export default function (test) {
   test('Menu', (assert) => {
-    assert.plan(7);
+    assert.plan(8);
     const client = {
       functions: {},
       request: spy(),
@@ -38,7 +38,8 @@ export default function (test) {
 
     assert.equal(element.findWhere((e) => (e.matchesElement(<Title />))).text(), 'Armageddon',
       'Shows title on launch');
-    assert.deepEqual(keys(client.functions), ['page.changed', 'settings.changed', 'apps.changed'],
+    assert.deepEqual(keys(client.functions),
+      ['page.changed', 'settings.changed', 'apps.changed', 'apps.error'],
       'Menu listens for value changes');
     assert.equal(client.request.calledWith('settings.initialize'), true,
       'Menu initializes settings on mount');
@@ -57,5 +58,9 @@ export default function (test) {
     client.functions['page.changed'](null, 'edit/a1234');
     assert.equal(element.findWhere((e) => (e.matchesElement(<Title />))).text(), apps.a1234.domain,
       'Changes to Edit page - Domain as title');
+
+    client.functions['apps.error'](null, { id: 'a1234', message: 'Error' });
+    assert.deepEqual(element.state('errors'), { a1234: 'Error' },
+      'Errors are created as needed');
   });
 }

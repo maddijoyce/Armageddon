@@ -13,6 +13,7 @@ export default function (test) {
     assert.plan(7);
     const mock = {
       client: { request: spy() },
+      errors: {},
     };
     const settings = {
       tld: 'dev',

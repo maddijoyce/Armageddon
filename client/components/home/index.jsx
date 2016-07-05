@@ -8,7 +8,7 @@ import css from './row.css';
 const propTypes = {
   client: PropTypes.object.isRequired,
   apps: PropTypes.object,
-  errors: PropTypes.object,
+  errors: PropTypes.object.isRequired,
   settings: PropTypes.object,
 };
 
@@ -40,7 +40,9 @@ class Home extends React.Component {
     }
 
     const { tld } = settings;
-    return map(apps, (a, k) => (<Row key={k} error={errors[k]} client={client} tld={tld} {...a} />));
+    return map(apps, (a, k) => (
+      <Row key={k} error={errors[k]} client={client} tld={tld} {...a} />
+    ));
   }
 
   render() {
